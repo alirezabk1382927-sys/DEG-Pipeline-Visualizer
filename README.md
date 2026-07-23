@@ -118,160 +118,225 @@ flowchart TD
 ```
 
    Publication‑ready figures (PNG, PDF, TIFF, SVG)
-Step 1 – Raw Data → DEG Results
-Reads the GDC sample sheet, normalises group definitions (Tumor vs. Normal), and filters duplicate samples.
 
-Parses every sample’s count file, builds a unified count matrix, and filters low‑count transcripts.
+---
 
-Executes PyDESeq2 (dispersion estimation, Wald test) and outputs:
+## 📊 Step 1 — Differential Expression Analysis
 
-Full results (All_DEGs_results.csv)
+The first stage performs a complete RNA-seq differential expression workflow starting from raw GDC/TCGA count files.
 
-Significant DEGs (Significant_DEGs.csv)
+### Main Tasks
 
-Up‑ and down‑regulated lists
+- Reads and validates the GDC Sample Sheet.
+- Automatically synchronizes metadata with expression files.
+- Detects and removes duplicated samples.
+- Builds a unified gene count matrix.
+- Filters genes with extremely low expression.
+- Estimates size factors and normalizes read counts.
+- Estimates gene-wise and fitted dispersions using **PyDESeq2**.
+- Performs Wald statistical testing.
+- Adjusts p-values using the Benjamini–Hochberg FDR procedure.
+- Generates reusable cache files for downstream visualization.
 
-Normalised counts (normalized_counts.csv)
+### Generated Files
 
-Sample grouping (sample_grouping.csv)
+| File | Description |
+|------|-------------|
+| `All_DEGs_results.csv` | Complete statistical results for every detected gene |
+| `Significant_DEGs.csv` | Genes passing user-defined significance thresholds |
+| `Upregulated_in_Tumor.csv` | Upregulated genes |
+| `Downregulated_in_Tumor.csv` | Downregulated genes |
+| `normalized_counts.csv` | Normalized expression matrix |
+| `sample_grouping.csv` | Parsed sample metadata |
+| `analysis_cache.csv` | Optimized cache used by the visualization module |
 
-An optimised cache file for instant loading in Step 2.
+---
 
-Step 2 – Visualisation and Export
-Load the cache file (or any result CSV) with one click.
+## 📈 Step 2 — Visualization Engine
 
-Tune thresholds, figure size, colour palettes, and DPI interactively.
+The second stage transforms the statistical outputs generated in Step 1 into high-quality publication-ready figures.
 
-Type or paste your target gene list; the software automatically highlights and labels them.
+Unlike conventional workflows, statistical analysis is executed only once. Subsequent visualization can be regenerated instantly by loading the cached analysis results.
 
-Generate individual plots or a combined three‑panel figure (Volcano + MA + bar chart) in one batch.
+### Available Visualizations
 
-Export in multiple vector and raster formats simultaneously.
+- Volcano Plot
+- MA Plot
+- Expression Heatmap
+- Summary Bar Chart
+- Combined Multi-panel Figure
 
-Installation
-Option A – Standalone Windows Executable (No Python)
-For researchers who prefer a ready‑to‑use graphical tool:
+### Interactive Features
 
-Download the latest DEG_Pipeline.exe from the Releases page.
+- Custom log₂ Fold Change threshold
+- Adjustable FDR threshold
+- Dynamic DPI selection
+- Flexible figure dimensions
+- Multiple export formats
+- Automatic gene highlighting
+- Collision-free label placement
+- Publication-quality vector graphics
 
-Double‑click the .exe to launch the application.
+### Export Formats
 
-Follow the on‑screen tabs (Step 1 → Step 2). No installation or command line is required.
+- PNG
+- PDF
+- SVG
+- TIFF
 
-Option B – Run from Source Code
-If you are comfortable with Python and want to customise the pipeline:
+---
 
-Prerequisites
-Python 3.9 or higher (3.10+ recommended)
+# 🚀 Installation
 
-pip (package manager)
+Two installation methods are provided depending on your preferred workflow.
 
-1. Clone the Repository
-bash
+## Option 1 — Standalone Windows Application (Recommended)
+
+For users who simply want to analyse RNA-seq datasets without installing Python.
+
+1. Download the latest executable from the **Releases** page.
+2. Extract the downloaded archive.
+3. Launch `DEG_Pipeline.exe`.
+4. Load your data and begin analysis immediately.
+
+No Python installation or command-line usage is required.
+
+---
+
+## Option 2 — Run from Source
+
+### Requirements
+
+- Python ≥ 3.9
+- pip
+- Windows / Linux / macOS
+
+### Clone Repository
+
+```bash
 git clone https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer.git
 cd DEG-Pipeline-Visualizer
-2. Create and Activate a Virtual Environment (Recommended)
-bash
-# Windows
+```
+
+### Create Virtual Environment
+
+```bash
 python -m venv venv
+```
+
+Windows
+
+```bash
 venv\Scripts\activate
+```
 
-# macOS / Linux
-python3 -m venv venv
+Linux / macOS
+
+```bash
 source venv/bin/activate
-3. Install Dependencies
-bash
+```
+
+### Install Dependencies
+
+```bash
 pip install -r requirements.txt
-The key dependencies are:
+```
 
-Package	Role
-pandas	High‑performance data manipulation and matrix construction
-numpy	Numerical computing and array operations
-matplotlib	Core plotting engine and Tkinter backend
-seaborn	Statistical visualisation styling and heatmaps
-adjustText	Automatic, collision‑free label placement on plots
-pydeseq2	Python implementation of the DESeq2 differential expression method
-4. Launch the Application
-bash
+### Launch
+
+```bash
 python deg_pipeline.py
-Usage
-Input Data Structure
-Organise your raw TCGA/GDC data as follows:
+```
 
-text
+---
+
+# 📦 Core Dependencies
+
+| Library | Purpose |
+|----------|----------|
+| PyDESeq2 | Differential expression analysis |
+| pandas | Data processing |
+| NumPy | Numerical computation |
+| Matplotlib | Scientific plotting |
+| Seaborn | Statistical visualization |
+| adjustText | Automatic gene-label optimization |
+| Tkinter | Desktop graphical interface |
+
+---
+
+# 📂 Input Data Structure
+
+```text
 Project_Directory/
-├── Gene_Expression_Quantification/      # folder containing per‑sample subfolders
-│   ├── sample_001/
-│   │   └── sample_001.rna_seq.augmented_star_gene_counts.tsv
-│   ├── sample_002/
-│   │   └── sample_002.rna_seq.augmented_star_gene_counts.tsv
+│
+├── Gene_Expression_Quantification/
+│   ├── Sample_001/
+│   ├── Sample_002/
 │   └── ...
-└── gdc_sample_sheet.tsv                 # official GDC metadata file
-The sample sheet must contain the columns: File ID, File Name, Sample ID, and Tissue Type (or Case ID). The software automatically normalises tissue types into Tumor and Normal.
+│
+└── gdc_sample_sheet.tsv
+```
 
-Output Folder Structure
-After analysis, the tool creates a clean, reproducible folder structure:
+---
 
-text
-Output_Directory/
+# 📁 Output Directory
+
+```text
+Output/
 ├── Data/
-│   ├── <Project>_All_DEGs_results.csv       # full statistical summary
-│   ├── <Project>_Significant_DEGs.csv       # DEGs passing thresholds
-│   ├── <Project>_Upregulated_in_Tumor.csv
-│   ├── <Project>_Downregulated_in_Tumor.csv
-│   ├── <Project>_normalized_counts.csv      # size‑factor normalised matrix
-│   ├── <Project>_sample_grouping.csv        # parsed sample metadata
-│   └── <Project>_analysis_cache.csv         # cache for Step 2
 ├── Pictures/
-│   ├── <Project>_volcano_plot.png
-│   ├── <Project>_ma_plot.png
-│   ├── <Project>_summary_bar_chart.png
-│   ├── <Project>_combined_standard.png
-│   └── <Project>_combined_standard_labeled.png  # if genes were listed
 └── Logs/
-    └── <Project>_analysis_log.txt           # full execution audit trail
-Repository Structure
-text
-DEG-Pipeline-Visualizer/
-├── deg_pipeline.py          # Main application source code
-├── requirements.txt         # Python dependencies
-├── LICENSE                  # MIT License
-├── README.md                # This documentation
-└── picures/                 # Screenshots for the README
-    ├── 1.png
-    ├── 2.png
-    ├── ...
-    └── result.png
-Citation
-If you use this tool in your research, please cite the repository as:
+```
 
-bibtex
-@software{Balaei_DEG_Pipeline_Visualizer_2026,
-  author = {Balaei Kahnamoei, Alireza},
-  title = {{DEG Pipeline \& Visualizer: An Integrated Open-Source Tool for Differential Gene Expression Analysis}},
-  year = {2026},
-  url = {https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer},
-  version = {2.0.2}
+Each generated file is automatically organized into dedicated folders, making downstream analyses reproducible and easy to manage.
+
+---
+
+# 📚 Citation
+
+If this software contributes to your published research, please cite the repository using the following BibTeX entry:
+
+```bibtex
+@software{Balaei2026,
+  author  = {Alireza Balaei Kahnamoei},
+  title   = {DEG Pipeline \& Visualizer},
+  year    = {2026},
+  url     = {https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer}
 }
-License
-This project is released under the MIT License. You are free to use, modify, and distribute the software for academic, non‑commercial, or commercial purposes, provided that proper attribution is given. See the LICENSE file for full details.
+```
 
-Author
-Alireza Balaei Kahnamoei
-Researcher & Developer
+---
 
-GitHub: alirezabk1382927-sys
+# 📜 License
 
-LinkedIn: Alireza Balaei Kahnamoei
+This project is released under the **MIT License**.
 
-Repository: DEG-Pipeline-Visualizer
+You are free to use, modify, distribute, and incorporate this software into academic or commercial projects, provided that the original copyright notice and license are retained.
 
-Contact
-If you have questions, suggestions, or encounter any issues, please open an Issue or contact the author directly.
+For complete licensing terms, see the `LICENSE` file.
 
-Final Remarks
-Differential expression analysis should not be a bottleneck. With DEG Pipeline & Visualizer, we aim to make transcriptomics more accessible, reproducible, and visually compelling. We hope this tool saves you time and helps you focus on what matters most — the biology.
+---
 
-Happy analysing!
+# 👨‍💻 Author
+
+**Alireza Balaei Kahnamoei**
+
+Bioinformatics Researcher • Computational Biologist • Python Developer
+
+- GitHub: https://github.com/alirezabk1382927-sys
+- LinkedIn: https://www.linkedin.com/in/alireza-balaei-kahnamoei-aa8216344
+
+---
+
+# 💬 Support
+
+Bug reports, feature requests, and scientific discussions are welcome.
+
+Please open an Issue through the GitHub repository.
+
+---
+
+> **Making differential expression analysis faster, reproducible, and accessible for every researcher.**
+> **Happy analysing!**
 
 Alireza Balaei Kahnamoei
