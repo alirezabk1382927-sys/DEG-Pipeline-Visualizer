@@ -94,30 +94,30 @@ The graphical interface is designed to be intuitive and user‑friendly. Below i
 ## System Architecture and Workflow
 
 The pipeline is split into two clear, modular steps:
+
+```text
 [ Raw Counts (.tsv / .tsv.gz) ] + [ GDC Sample Sheet (.tsv) ]
-│
-▼
-┌─────────────────────┐
-│ STEP 1: DEG │ (PyDESeq2, metadata sync,
-│ Analysis Engine │ normalisation, filtering)
-└──────────┬──────────┘
-│
-┌──────────┼──────────────┐
-▼ ▼ ▼
-Data/ Pictures/ Logs/
-(CSVs) (figures) (audit)
-│
-▼
-┌─────────────────────┐
-│ STEP 2: │ (Volcano, MA, heatmap,
-│ Visualizer │ bar chart, gene labelling)
-└──────────┬──────────┘
-│
-▼
-Publication‑ready figures (PNG, PDF, TIFF, SVG)
-
-text
-
+                │
+                ▼
+     ┌─────────────────────┐
+     │   STEP 1: DEG       │   (PyDESeq2, metadata sync,
+     │   Analysis Engine   │    normalisation, filtering)
+     └──────────┬──────────┘
+                │
+     ┌──────────┼──────────────┐
+     ▼          ▼              ▼
+  Data/      Pictures/      Logs/
+ (CSVs)     (figures)      (audit)
+                │
+                ▼
+     ┌─────────────────────┐
+     │   STEP 2:           │   (Volcano, MA, heatmap,
+     │   Visualizer        │    bar chart, gene labelling)
+     └──────────┬──────────┘
+                │
+                ▼
+   Publication‑ready figures (PNG, PDF, TIFF, SVG)
+```
 ### Step 1 – Raw Data → DEG Results
 
 + Reads the GDC sample sheet, normalises group definitions (Tumor vs. Normal), and filters duplicate samples.
