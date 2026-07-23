@@ -354,4 +354,10 @@ If this project contributes to your research, consider giving the repository a �
 
 Your feedback and contributions help improve the project for the research community.
 
-Alireza Balaei Kahnamoei
+
+
+---
+
+Made with ❤️ for the bioinformatics research community.
+
+**Alireza Balaei Kahnamoei**
