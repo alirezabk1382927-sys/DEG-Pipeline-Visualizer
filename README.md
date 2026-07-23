@@ -1,10 +1,10 @@
-# DEG Pipeline & Visualizer — Multi‑Cancer Analysis
+## An open-source desktop GUI application for differential gene expression (DEG) analysis built on PyDESeq2.
 
 [![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![GUI](https://img.shields.io/badge/UI-Tkinter%2FMatplotlib-orange.svg)]()
+![GUI](https://img.shields.io/badge/UI-Tkinter%2FMatplotlib-orange.svg)
 [![Backend](https://img.shields.io/badge/Engine-PyDESeq2-purple.svg)](https://pydeseq2.readthedocs.io/)
-[![Build](https://img.shields.io/badge/Executable-Standalone%20.exe-brightgreen.svg)]()
+![Build](https://img.shields.io/badge/Executable-Standalone.exe-brightgreen.svg)
 
 An integrated, open‑source desktop application that transforms raw RNA‑seq count matrices into publication‑ready differential expression figures — without writing a single line of code.
 
@@ -18,8 +18,6 @@ RNA‑sequencing has become the cornerstone of modern transcriptomics, enabling 
 + Data wrangling — merging sample sheets, handling duplicates, filtering low‑count genes — is tedious and error‑prone.
 + Generating publication‑quality figures with custom gene labels often demands manual coding and endless tweaking of plotting parameters.
 + Sharing workflows across teams leads to environment conflicts, especially when packaging multi‑processing libraries into standalone executables.
-
-**DEG Pipeline & Visualizer** eliminates these barriers by wrapping the powerful statistical engine of PyDESeq2 into an intuitive, two‑step graphical interface. Whether you are a bioinformatician, a wet‑lab researcher, or a clinician, you can now upload your raw data, run a complete DEG analysis with a single click, and obtain high‑resolution, publication‑ready figures.
 
 ---
 
@@ -117,8 +115,6 @@ flowchart TD
     J[PNG • PDF • TIFF • SVG]
 ```
 
-   Publication‑ready figures (PNG, PDF, TIFF, SVG)
-
 ---
 
 ## 📊 Step 1 — Differential Expression Analysis
@@ -188,7 +184,7 @@ Unlike conventional workflows, statistical analysis is executed only once. Subse
 
 # 🚀 Installation
 
-Two installation methods are provided depending on your preferred workflow.
+DEG Pipeline & Visualizer can be used either as a standalone Windows application or directly from the source code.
 
 ## Option 1 — Standalone Windows Application (Recommended)
 
@@ -284,8 +280,21 @@ Project_Directory/
 ```text
 Output/
 ├── Data/
+│   ├── All_DEGs_results.csv
+│   ├── Significant_DEGs.csv
+│   ├── normalized_counts.csv
+│   ├── sample_grouping.csv
+│   └── analysis_cache.csv
+│
 ├── Pictures/
+│   ├── Volcano Plot
+│   ├── MA Plot
+│   ├── Heatmap
+│   ├── Summary Bar Chart
+│   └── Combined Figure
+│
 └── Logs/
+    └── analysis_log.txt
 ```
 
 Each generated file is automatically organized into dedicated folders, making downstream analyses reproducible and easy to manage.
@@ -317,26 +326,32 @@ For complete licensing terms, see the `LICENSE` file.
 
 ---
 
-# 👨‍💻 Author
+## 👨‍💻 Author
 
 **Alireza Balaei Kahnamoei**
 
-Bioinformatics Researcher • Computational Biologist • Python Developer
-
-- GitHub: https://github.com/alirezabk1382927-sys
-- LinkedIn: https://www.linkedin.com/in/alireza-balaei-kahnamoei-aa8216344
+B.Sc. Biotechnology Student  
+Bioinformatics Researcher  
+Computational Biology Enthusiast  
+Python Developer
 
 ---
 
 # 💬 Support
 
-Bug reports, feature requests, and scientific discussions are welcome.
+Questions, bug reports, feature requests, and scientific discussions are welcome.
 
-Please open an Issue through the GitHub repository.
+Please open a GitHub Issue for bugs or feature requests.
+
+For research collaborations or other inquiries, feel free to contact the author through GitHub or LinkedIn.
 
 ---
 
 > **Making differential expression analysis faster, reproducible, and accessible for every researcher.**
-> **Happy analysing!**
+---
+
+If this project contributes to your research, consider giving the repository a ⭐ on GitHub.
+
+Your feedback and contributions help improve the project for the research community.
 
 Alireza Balaei Kahnamoei
