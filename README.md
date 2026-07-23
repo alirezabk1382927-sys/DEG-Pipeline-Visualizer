@@ -1,4 +1,3 @@
-```markdown
 # DEG Pipeline & Visualizer — Multi-Cancer Analysis
 
 [![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
