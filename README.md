@@ -1,3 +1,4 @@
+An all-in-one desktop GUI for end-to-end RNA-seq Differential Gene Expression (DEG) analysis & publication-ready visualization powered by PyDESeq2.
 
 ## An open-source desktop GUI application for differential gene expression (DEG) analysis, built on PyDESeq2.
 
