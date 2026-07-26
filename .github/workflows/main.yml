@@ -14,13 +14,10 @@ jobs:
         include:
           - os: windows-latest
             platform: windows
-            artifact_ext: exe
           - os: macos-latest
             platform: macos
-            artifact_ext: app
           - os: ubuntu-latest
             platform: linux
-            artifact_ext: bin
 
     runs-on: ${{ matrix.os }}
 
@@ -43,7 +40,6 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      # ---------- Windows ----------
       - name: Convert PNG icon for macOS (icns)
         if: matrix.platform == 'macos'
         run: |
@@ -60,6 +56,7 @@ jobs:
           cp ICON.png icon.iconset/icon_512x512@2x.png
           iconutil -c icns icon.iconset -o icon.icns
 
+      # ---------- Build ----------
       - name: Build (Windows)
         if: matrix.platform == 'windows'
         run: |
@@ -86,14 +83,49 @@ jobs:
             --add-data "icon.ico:." \
             deg_pipeline.py
 
-      - name: Upload artifact
+      # ---------- Rename output so the OS is obvious ----------
+      - name: Rename output (Windows)
+        if: matrix.platform == 'windows'
+        run: |
+          ren dist\DEG_Pipeline.exe DEG_Pipeline-Windows-x64.exe
+
+      - name: Rename & zip output (macOS)
+        if: matrix.platform == 'macos'
+        run: |
+          cd dist
+          if [ -d "DEG_Pipeline.app" ]; then
+            mv DEG_Pipeline.app "DEG_Pipeline-macOS.app"
+            zip -r "DEG_Pipeline-macOS.zip" "DEG_Pipeline-macOS.app"
+          else
+            mv DEG_Pipeline "DEG_Pipeline-macOS"
+          fi
+
+      - name: Rename output (Linux)
+        if: matrix.platform == 'linux'
+        run: |
+          mv dist/DEG_Pipeline dist/DEG_Pipeline-Linux-x64
+
+      # ---------- Upload ----------
+      - name: Upload artifact (Windows)
+        if: matrix.platform == 'windows'
         uses: actions/upload-artifact@v4
         with:
-          name: DEG_Pipeline-${{ matrix.platform }}
-          path: |
-            dist/DEG_Pipeline*
-            dist/DEG_Pipeline.app
-          if-no-files-found: ignore
+          name: DEG_Pipeline-Windows-x64
+          path: dist/DEG_Pipeline-Windows-x64.exe
+
+      - name: Upload artifact (macOS)
+        if: matrix.platform == 'macos'
+        uses: actions/upload-artifact@v4
+        with:
+          name: DEG_Pipeline-macOS
+          path: dist/DEG_Pipeline-macOS.zip
+
+      - name: Upload artifact (Linux)
+        if: matrix.platform == 'linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: DEG_Pipeline-Linux-x64
+          path: dist/DEG_Pipeline-Linux-x64
 
   release:
     needs: build
