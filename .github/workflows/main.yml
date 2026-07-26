@@ -1,10 +1,14 @@
 name: Build DEG Pipeline Executables
 
 on:
-  push:
-    tags:
-      - 'v*'
+  # این بخش باعث می‌شود به محض اینکه در گیت‌هاب یک Release منتشر کردید، اکشن اجرا شود
+  release:
+    types: [published]
   workflow_dispatch:
+
+# این دسترسی برای آپلود کردن فایل‌های نهایی به داخل ریلیز الزامی است
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -86,8 +90,9 @@ jobs:
       # ---------- Rename output so the OS is obvious ----------
       - name: Rename output (Windows)
         if: matrix.platform == 'windows'
+        # تغییر مهم: در ویندوز بهتر است از Move-Item پاورشل استفاده شود تا خطای مسیر ندهد
         run: |
-          ren dist\DEG_Pipeline.exe DEG_Pipeline-Windows-x64.exe
+          Move-Item -Path "dist\DEG_Pipeline.exe" -Destination "dist\DEG_Pipeline-Windows-x64.exe"
 
       - name: Rename & zip output (macOS)
         if: matrix.platform == 'macos'
@@ -129,7 +134,6 @@ jobs:
 
   release:
     needs: build
-    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
       - name: Download all artifacts
@@ -137,9 +141,8 @@ jobs:
         with:
           path: artifacts
 
-      - name: Create GitHub Release
+      - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: artifacts/**/*
-          draft: false
-          generate_release_notes: true
+          # نیازی به ساخت ریلیز جدید نیست، فایل‌ها به همان ریلیزی که ماشه را کشیده اضافه می‌شوند
