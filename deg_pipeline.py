@@ -149,7 +149,7 @@ from tkinter import ttk, filedialog, messagebox
 APP_AUTHOR = "Alireza Balaei"
 APP_GITHUB = "https://github.com/alirezabk1382927-sys"
 APP_LINKEDIN = "https://ir.linkedin.com/in/alireza-balaei-kahnamoei-aa8216344"
-APP_VERSION = "2.0.2"
+APP_VERSION = "2.0.4"
 
 
 # ==================================================================
