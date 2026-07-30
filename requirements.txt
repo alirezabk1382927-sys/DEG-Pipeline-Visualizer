@@ -1,6 +1,43 @@
-pandas
-numpy
-matplotlib
-seaborn
-adjustText
-pydeseq2
+# ==============================================================================
+#  DEG Pipeline & Visualizer - Python Dependencies
+#  Tested on Python 3.10+  |  Windows / macOS / Linux
+# ==============================================================================
+#  Install with:
+#      pip install -r requirements.txt
+# ==============================================================================
+
+# ---- Data handling & numerical computing ------------------------------------
+pandas>=1.5.0
+numpy>=1.23.0
+
+# ---- Differential expression analysis engine --------------------------------
+pydeseq2>=0.4.0
+
+# ---- Plotting & visualization -------------------------------------------------
+matplotlib>=3.6.0
+seaborn>=0.12.0
+adjustText>=0.8
+
+# ---- Desktop GUI framework ---------------------------------------------------
+customtkinter>=5.2.0
+
+# ---- Image handling (icons, previews, thumbnails) -----------------------------
+Pillow>=9.0.0
+
+# ==============================================================================
+#  NOTES
+# ==============================================================================
+#  - "tkinter" is part of the Python standard library and is NOT installed via
+#    pip. On Linux, install it at the OS level if missing, e.g.:
+#        sudo apt-get install python3-tk        (Debian/Ubuntu)
+#        sudo dnf install python3-tkinter       (Fedora)
+#    On macOS, install via Homebrew if needed:
+#        brew install python-tk
+#    On Windows, tkinter ships with the official python.org installer.
+#
+#  - The application will attempt to auto-install any missing package listed
+#    above on first launch when running from source (not applicable to
+#    frozen/packaged executables).
+#
+#  - GPU acceleration is not required; all computation runs on CPU.
+# ==============================================================================
