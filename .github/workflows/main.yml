@@ -1,12 +1,10 @@
 name: Build DEG Pipeline Executables
 
 on:
-  # این بخش باعث می‌شود به محض اینکه در گیت‌هاب یک Release منتشر کردید، اکشن اجرا شود
   release:
     types: [published]
   workflow_dispatch:
 
-# این دسترسی برای آپلود کردن فایل‌های نهایی به داخل ریلیز الزامی است
 permissions:
   contents: write
 
@@ -61,48 +59,38 @@ jobs:
           iconutil -c icns icon.iconset -o icon.icns
 
       # ---------- Build ----------
-      # نکته‌ی مهم: هم icon.png و هم main_icon.png باید با --add-data داخل
-      # اجرایی پکیج بشن، وگرنه در حالت onefile موقع اجرا (به‌خصوص وقتی کاربر
-      # فقط خود exe/app رو دانلود کرده) پیدا نمی‌شن و برنامه main_icon.png
-      # رو fallback می‌کنه به icon.ico (همون باگی که آیکن اشتباه نشون می‌داد)
       - name: Build (Windows)
         if: matrix.platform == 'windows'
         run: |
           pyinstaller --noconfirm --onefile --windowed `
             --name DEG_Pipeline `
-            --icon icon.ico `
-            --add-data "icon.ico;." `
+            --icon icon.png `
             --add-data "icon.png;." `
-            --add-data "main_icon.png;." `
             deg_pipeline.py
 
       - name: Build (macOS)
         if: matrix.platform == 'macos'
         run: |
-          pyinstaller --noconfirm --onefile --windowed \
-            --name DEG_Pipeline \
-            --icon icon.icns \
-            --add-data "icon.icns:." \
-            --add-data "icon.png:." \
-            --add-data "main_icon.png:." \
+          pyinstaller --noconfirm --onefile --windowed `
+            --name DEG_Pipeline `
+            --icon icon.icns `
+            --add-data "icon.png:." `
             deg_pipeline.py
 
       - name: Build (Linux)
         if: matrix.platform == 'linux'
         run: |
-          pyinstaller --noconfirm --onefile \
-            --name DEG_Pipeline \
-            --add-data "icon.ico:." \
-            --add-data "icon.png:." \
-            --add-data "main_icon.png:." \
+          pyinstaller --noconfirm --onefile `
+            --name DEG_Pipeline `
+            --icon icon.png `
+            --add-data "icon.png:." `
             deg_pipeline.py
 
       # ---------- Rename output so the OS is obvious ----------
       - name: Rename output (Windows)
         if: matrix.platform == 'windows'
-        # تغییر مهم: در ویندوز بهتر است از Move-Item پاورشل استفاده شود تا خطای مسیر ندهد
         run: |
-          Move-Item -Path "dist\DEG_Pipeline.exe" -Destination "dist\DEG_Pipeline-Windows-x64.exe"
+          Move-Item -Path "dist/DEG_Pipeline.exe" -Destination "dist/DEG_Pipeline-Windows-x64.exe"
 
       - name: Rename & zip output (macOS)
         if: matrix.platform == 'macos'
@@ -111,9 +99,11 @@ jobs:
           if [ -d "DEG_Pipeline.app" ]; then
             mv DEG_Pipeline.app "DEG_Pipeline-macOS.app"
             zip -r "DEG_Pipeline-macOS.zip" "DEG_Pipeline-macOS.app"
-          else
+          elif [ -f "DEG_Pipeline" ]; then
             mv DEG_Pipeline "DEG_Pipeline-macOS"
+            zip -r "DEG_Pipeline-macOS.zip" "DEG_Pipeline-macOS"
           fi
+        continue-on-error: false
 
       - name: Rename output (Linux)
         if: matrix.platform == 'linux'
@@ -155,4 +145,3 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: artifacts/**/*
-          # نیازی به ساخت ریلیز جدید نیست، فایل‌ها به همان ریلیزی که ماشه را کشیده اضافه می‌شوند
