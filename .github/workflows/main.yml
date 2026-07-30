@@ -48,19 +48,23 @@ jobs:
         if: matrix.platform == 'macos'
         run: |
           mkdir icon.iconset
-          sips -z 16 16     ICON.png --out icon.iconset/icon_16x16.png
-          sips -z 32 32     ICON.png --out icon.iconset/icon_16x16@2x.png
-          sips -z 32 32     ICON.png --out icon.iconset/icon_32x32.png
-          sips -z 64 64     ICON.png --out icon.iconset/icon_32x32@2x.png
-          sips -z 128 128   ICON.png --out icon.iconset/icon_128x128.png
-          sips -z 256 256   ICON.png --out icon.iconset/icon_128x128@2x.png
-          sips -z 256 256   ICON.png --out icon.iconset/icon_256x256.png
-          sips -z 512 512   ICON.png --out icon.iconset/icon_256x256@2x.png
-          sips -z 512 512   ICON.png --out icon.iconset/icon_512x512.png
-          cp ICON.png icon.iconset/icon_512x512@2x.png
+          sips -z 16 16     icon.png --out icon.iconset/icon_16x16.png
+          sips -z 32 32     icon.png --out icon.iconset/icon_16x16@2x.png
+          sips -z 32 32     icon.png --out icon.iconset/icon_32x32.png
+          sips -z 64 64     icon.png --out icon.iconset/icon_32x32@2x.png
+          sips -z 128 128   icon.png --out icon.iconset/icon_128x128.png
+          sips -z 256 256   icon.png --out icon.iconset/icon_128x128@2x.png
+          sips -z 256 256   icon.png --out icon.iconset/icon_256x256.png
+          sips -z 512 512   icon.png --out icon.iconset/icon_256x256@2x.png
+          sips -z 512 512   icon.png --out icon.iconset/icon_512x512.png
+          cp icon.png icon.iconset/icon_512x512@2x.png
           iconutil -c icns icon.iconset -o icon.icns
 
       # ---------- Build ----------
+      # نکته‌ی مهم: هم icon.png و هم main_icon.png باید با --add-data داخل
+      # اجرایی پکیج بشن، وگرنه در حالت onefile موقع اجرا (به‌خصوص وقتی کاربر
+      # فقط خود exe/app رو دانلود کرده) پیدا نمی‌شن و برنامه main_icon.png
+      # رو fallback می‌کنه به icon.ico (همون باگی که آیکن اشتباه نشون می‌داد)
       - name: Build (Windows)
         if: matrix.platform == 'windows'
         run: |
@@ -68,6 +72,8 @@ jobs:
             --name DEG_Pipeline `
             --icon icon.ico `
             --add-data "icon.ico;." `
+            --add-data "icon.png;." `
+            --add-data "main_icon.png;." `
             deg_pipeline.py
 
       - name: Build (macOS)
@@ -77,6 +83,8 @@ jobs:
             --name DEG_Pipeline \
             --icon icon.icns \
             --add-data "icon.icns:." \
+            --add-data "icon.png:." \
+            --add-data "main_icon.png:." \
             deg_pipeline.py
 
       - name: Build (Linux)
@@ -85,6 +93,8 @@ jobs:
           pyinstaller --noconfirm --onefile \
             --name DEG_Pipeline \
             --add-data "icon.ico:." \
+            --add-data "icon.png:." \
+            --add-data "main_icon.png:." \
             deg_pipeline.py
 
       # ---------- Rename output so the OS is obvious ----------
