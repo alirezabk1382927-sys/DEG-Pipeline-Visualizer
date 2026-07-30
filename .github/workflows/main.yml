@@ -1,147 +1,84 @@
-name: Build DEG Pipeline Executables
+name: Build and Release DEG Pipeline
 
 on:
-  release:
-    types: [published]
-  workflow_dispatch:
-
-permissions:
-  contents: write
+  push:
+    tags:
+      - 'v*' 
+  workflow_dispatch: 
 
 jobs:
   build:
+    name: Build for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
         include:
           - os: windows-latest
-            platform: windows
-          - os: macos-latest
-            platform: macos
+            artifact_name: DEG_Pipeline_Windows.exe
+            asset_name: DEG_Pipeline_Windows
+            sep: ";"
+            icon_arg: "--icon=icon.png" 
           - os: ubuntu-latest
-            platform: linux
-
-    runs-on: ${{ matrix.os }}
+            artifact_name: DEG_Pipeline_Linux
+            asset_name: DEG_Pipeline_Linux
+            sep: ":"
+            icon_arg: "--icon=icon.png"
+          - os: macos-latest
+            artifact_name: DEG_Pipeline_macOS
+            asset_name: DEG_Pipeline_macOS
+            sep: ":"
+            icon_arg: "--icon=icon.png" 
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.10'
 
-      - name: Install Linux Tk dependency
-        if: matrix.platform == 'linux'
-        run: sudo apt-get update && sudo apt-get install -y python3-tk
+      - name: Install System Dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libx11-dev libxcb1-dev libxcursor-dev libxi-dev libxext-dev
 
-      - name: Install dependencies
+      - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
           pip install pyinstaller
+          # نصب کتابخانه‌های مورد نیاز برنامه شما
+          pip install pandas numpy matplotlib seaborn adjustText pydeseq2 customtkinter Pillow
 
-      - name: Convert PNG icon for macOS (icns)
-        if: matrix.platform == 'macos'
+      - name: Build Executable with PyInstaller
         run: |
-          mkdir icon.iconset
-          sips -z 16 16     icon.png --out icon.iconset/icon_16x16.png
-          sips -z 32 32     icon.png --out icon.iconset/icon_16x16@2x.png
-          sips -z 32 32     icon.png --out icon.iconset/icon_32x32.png
-          sips -z 64 64     icon.png --out icon.iconset/icon_32x32@2x.png
-          sips -z 128 128   icon.png --out icon.iconset/icon_128x128.png
-          sips -z 256 256   icon.png --out icon.iconset/icon_128x128@2x.png
-          sips -z 256 256   icon.png --out icon.iconset/icon_256x256.png
-          sips -z 512 512   icon.png --out icon.iconset/icon_256x256@2x.png
-          sips -z 512 512   icon.png --out icon.iconset/icon_512x512.png
-          cp icon.png icon.iconset/icon_512x512@2x.png
-          iconutil -c icns icon.iconset -o icon.icns
+          # در این بخش فایل‌های icon.png و icon.ico به همراه برنامه باندل می‌شوند
+          # تا هم برای لوگوی داخل برنامه (png) و هم نشانک (ico) در دسترس باشند.
+          pyinstaller --noconfirm --onefile --windowed ${{ matrix.icon_arg }} --add-data "icon.png${{ matrix.sep }}." --add-data "icon.ico${{ matrix.sep }}." --name "${{ matrix.artifact_name }}" main.py
 
-      # ---------- Build ----------
-      - name: Build (Windows)
-        if: matrix.platform == 'windows'
-        run: |
-          pyinstaller --noconfirm --onefile --windowed `
-            --name DEG_Pipeline `
-            --icon icon.png `
-            --add-data "icon.png;." `
-            deg_pipeline.py
-
-      - name: Build (macOS)
-        if: matrix.platform == 'macos'
-        run: |
-          pyinstaller --noconfirm --onefile --windowed `
-            --name DEG_Pipeline `
-            --icon icon.icns `
-            --add-data "icon.png:." `
-            deg_pipeline.py
-
-      - name: Build (Linux)
-        if: matrix.platform == 'linux'
-        run: |
-          pyinstaller --noconfirm --onefile `
-            --name DEG_Pipeline `
-            --icon icon.png `
-            --add-data "icon.png:." `
-            deg_pipeline.py
-
-      # ---------- Rename output so the OS is obvious ----------
-      - name: Rename output (Windows)
-        if: matrix.platform == 'windows'
-        run: |
-          Move-Item -Path "dist/DEG_Pipeline.exe" -Destination "dist/DEG_Pipeline-Windows-x64.exe"
-
-      - name: Rename & zip output (macOS)
-        if: matrix.platform == 'macos'
-        run: |
-          cd dist
-          if [ -d "DEG_Pipeline.app" ]; then
-            mv DEG_Pipeline.app "DEG_Pipeline-macOS.app"
-            zip -r "DEG_Pipeline-macOS.zip" "DEG_Pipeline-macOS.app"
-          elif [ -f "DEG_Pipeline" ]; then
-            mv DEG_Pipeline "DEG_Pipeline-macOS"
-            zip -r "DEG_Pipeline-macOS.zip" "DEG_Pipeline-macOS"
-          fi
-        continue-on-error: false
-
-      - name: Rename output (Linux)
-        if: matrix.platform == 'linux'
-        run: |
-          mv dist/DEG_Pipeline dist/DEG_Pipeline-Linux-x64
-
-      # ---------- Upload ----------
-      - name: Upload artifact (Windows)
-        if: matrix.platform == 'windows'
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DEG_Pipeline-Windows-x64
-          path: dist/DEG_Pipeline-Windows-x64.exe
-
-      - name: Upload artifact (macOS)
-        if: matrix.platform == 'macos'
-        uses: actions/upload-artifact@v4
-        with:
-          name: DEG_Pipeline-macOS
-          path: dist/DEG_Pipeline-macOS.zip
-
-      - name: Upload artifact (Linux)
-        if: matrix.platform == 'linux'
-        uses: actions/upload-artifact@v4
-        with:
-          name: DEG_Pipeline-Linux-x64
-          path: dist/DEG_Pipeline-Linux-x64
+          name: ${{ matrix.asset_name }}
+          path: dist/${{ matrix.artifact_name }}
 
   release:
     needs: build
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - name: Download all artifacts
+      - name: Download All Artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
 
-      - name: Upload to GitHub Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/**/*
+          files: |
+            artifacts/DEG_Pipeline_Windows/DEG_Pipeline_Windows.exe
+            artifacts/DEG_Pipeline_Linux/DEG_Pipeline_Linux
+            artifacts/DEG_Pipeline_macOS/DEG_Pipeline_macOS
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
