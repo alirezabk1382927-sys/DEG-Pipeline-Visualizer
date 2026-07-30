@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer/main/main_icon.png" alt="DEG Pipeline & Visualizer Logo" width="400"/>
+<img src="https://raw.githubusercontent.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer/main/icon.png" alt="DEG Pipeline & Visualizer Logo" width="600"/>
 
 # DEG Pipeline & Visualizer
 
@@ -87,8 +87,6 @@ In short: the pipeline **ingests raw counts → runs statistical differential ex
 <img src="docs/dark.png" alt="DEG Pipeline & Visualizer - Dark Theme Screenshot" width="850"/>
 
 </div>
-
-> 💡 *Screenshot files live in the [`docs/`](./docs) folder as `light.png` and `dark.png`. Rename or replace them there if your exported filenames differ.*
 
 ---
 
