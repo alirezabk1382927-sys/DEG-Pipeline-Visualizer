@@ -18,6 +18,7 @@
 [Overview](#-overview) •
 [Features](#-key-features) •
 [Screenshots](#-screenshots) •
+[Download](#-download-recommended) •
 [Installation](#-installation) •
 [Usage](#-usage-guide) •
 [Requirements](#-requirements) •
@@ -93,27 +94,47 @@ In short: the pipeline **ingests raw counts → runs statistical differential ex
 
 ## 📊 Sample Output Gallery
 
+*Real figures generated directly by DEG Pipeline & Visualizer from a TCGA project run.*
+
 <div align="center">
 
-| Volcano Plot | MA Plot |
+| Volcano Plot (Labeled) | MA Plot (Labeled) |
 |:---:|:---:|
-| <img src="docs/sample_volcano.png" alt="Sample Volcano Plot" width="400"/> | <img src="docs/sample_ma_plot.png" alt="Sample MA Plot" width="400"/> |
+| <img src="docs/TCGA-Project_volcano_plot_labeled.png" alt="TCGA Project - Labeled Volcano Plot" width="400"/> | <img src="docs/TCGA-Project_ma_plot_labeled.png" alt="TCGA Project - Labeled MA Plot" width="400"/> |
 
-| Summary Bar Chart | combined standard |
+| Summary Bar Chart | Combined Standard Figure |
 |:---:|:---:|
-| <img src="docs/sample_bar_chart.png" alt="Sample Summary Bar Chart" width="400"/> | <img src="docs/sample_heatmap.png" alt="Sample Expression Heatmap" width="400"/> |
+| <img src="docs/TCGA-Project_summary_bar_chart.png" alt="TCGA Project - Summary Bar Chart" width="400"/> | <img src="docs/TCGA-Project_combined_standard.png" alt="TCGA Project - Combined Standard Figure (Volcano + MA + Bar)" width="400"/> |
 
-| ombined standard labeled |
+| Combined Standard Figure (Labeled) |
 |:---:|
-| <img src="docs/sample_bar_chart.png" alt="Sample Summary Bar Chart" width="400"/> |
+| <img src="docs/TCGA-Project_combined_standard_labeled.png" alt="TCGA Project - Combined Standard Figure, Labeled" width="820"/> |
 
 </div>
+
+> 📌 All figures above were exported straight from the app's **Save all previewed plots** feature — the combined figures place the Volcano, MA, and Bar Chart side by side in a single publication-ready composite.
 
 ---
 
 ## 💻 Installation
 
-**DEG Pipeline & Visualizer** runs natively on **Windows**, **macOS**, and **Linux**. Choose the guide for your operating system below.
+**DEG Pipeline & Visualizer** runs natively on **Windows**, **macOS**, and **Linux**.
+
+### ⭐ Download (Recommended)
+
+The **easiest and fastest way** to get started is to download the latest **ready-to-use build** from the **[Releases page](https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer/releases)** — no Python setup, no dependency installation, no command line required.
+
+1. Go to **[Releases](https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer/releases/latest)**.
+2. Download the build for your operating system (**Windows**, **macOS**, or **Linux**).
+3. Extract the archive (if zipped) and run the application directly.
+
+> ✅ This is the recommended method for most users — it's simpler, faster, and doesn't require installing Python or any dependencies manually. Use the **"Run from source"** guide below only if you want to modify the code, contribute, or run on a platform without a prebuilt release.
+
+---
+
+### 🛠️ Run From Source (Advanced)
+
+Only needed if you want to inspect, modify, or contribute to the code. Requires Python.
 
 ### ✅ Prerequisites (all platforms)
 
