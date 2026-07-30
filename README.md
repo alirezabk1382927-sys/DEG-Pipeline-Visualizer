@@ -1,404 +1,249 @@
 <div align="center">
 
-# 🧬 DEG Pipeline & Visualizer
+<img src="https://raw.githubusercontent.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer/main/main_icon.png" alt="DEG Pipeline & Visualizer Logo" width="400"/>
 
-### All-in-one desktop GUI for end-to-end RNA-seq Differential Gene Expression (DEG) analysis & publication-ready visualization — powered by PyDESeq2
+# DEG Pipeline & Visualizer
 
-<em>No coding required. Load your counts, run the statistics, export the figures.</em>
+### Multi-Cancer Differential Gene Expression Analysis & Publication-Ready Visualization Suite
 
-<br/>
+**A modern desktop application for automated RNA-seq Differential Expression Analysis (DEA), powered by PyDESeq2, built for TCGA-style multi-cancer datasets.**
 
-[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![GUI](https://img.shields.io/badge/UI-Tkinter%2FMatplotlib-orange.svg?style=for-the-badge)](#)
-[![Backend](https://img.shields.io/badge/Engine-PyDESeq2-purple.svg?style=for-the-badge)](https://pydeseq2.readthedocs.io/)
-[![Build](https://img.shields.io/badge/Executable-Standalone.exe-brightgreen.svg?style=for-the-badge&logo=windows&logoColor=white)](#-installation)
+[![License: Proprietary](https://img.shields.io/badge/License-Proprietary%20%2F%20All%20Rights%20Reserved-red.svg)](./LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-informational.svg)](#-installation)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](#-requirements)
+[![Powered by PyDESeq2](https://img.shields.io/badge/Engine-PyDESeq2-22D3EE.svg)](https://github.com/scverse/PyDESeq2)
+[![Status](https://img.shields.io/badge/Status-Active%20Development-brightgreen.svg)](#)
+[![Made with CustomTkinter](https://img.shields.io/badge/GUI-CustomTkinter-2C3444.svg)](#)
 
-<br/>
-
-[![Stars](https://img.shields.io/github/stars/alirezabk1382927-sys/DEG-Pipeline-Visualizer?style=social)](https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer/stargazers)
-[![Forks](https://img.shields.io/github/forks/alirezabk1382927-sys/DEG-Pipeline-Visualizer?style=social)](https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer/network/members)
-[![Issues](https://img.shields.io/github/issues/alirezabk1382927-sys/DEG-Pipeline-Visualizer?style=flat-square)](https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer/issues)
-
-<br/>
-
-<a href="#-installation"><b>Installation</b></a> •
-<a href="#-step-1--differential-expression-analysis"><b>Analysis Engine</b></a> •
-<a href="#-step-2--visualization-engine"><b>Visualization</b></a> •
-<a href="#-screenshots--example-output-figures"><b>Gallery</b></a> •
-<a href="#-citation"><b>Citation</b></a>
+[Overview](#-overview) •
+[Features](#-key-features) •
+[Screenshots](#-screenshots) •
+[Installation](#-installation) •
+[Usage](#-usage-guide) •
+[Requirements](#-requirements) •
+[Citation](#-citation) •
+[License](#-license) •
+[Author](#-author--contact)
 
 </div>
-
-<br/>
 
 ---
 
 ## 📖 Overview
 
-RNA-sequencing has become the cornerstone of modern transcriptomics, enabling researchers to uncover the molecular drivers of cancer, drug resistance, and metastasis. Yet, turning thousands of raw count files into interpretable, statistically robust results remains a steep challenge:
+**DEG Pipeline & Visualizer** is a cross-platform desktop application that automates the full workflow of **Differential Gene Expression (DEG) Analysis** for bulk RNA-seq data — from raw TCGA/GDC count files all the way to **publication-quality figures** — without writing a single line of code.
 
-| Challenge | Why it hurts |
-|:--|:--|
-| 🧮 **Statistical modelling** | Running DESeq2 properly requires proficiency in R or Python |
-| 🗂️ **Data wrangling** | Merging sample sheets, handling duplicates, filtering low-count genes is tedious and error-prone |
-| 🎨 **Figure generation** | Publication-quality plots with custom gene labels demand manual coding and endless tweaking |
-| 🔁 **Sharing workflows** | Environment conflicts arise across teams, especially packaging multiprocessing libraries into `.exe` files |
+It is designed for **bioinformaticians, cancer researchers, molecular biologists, and graduate students** working with **TCGA (The Cancer Genome Atlas)** or any GDC-formatted STAR-Counts RNA-seq datasets across **multiple cancer types**, and who need fast, reproducible, statistically rigorous differential expression results with beautiful, ready-to-publish plots.
 
-> **DEG Pipeline & Visualizer** solves all four — it performs the statistical analysis in one step, then lets you regenerate and customize any figure from the saved results, **without rerunning the analysis or writing any code.**
+The application wraps the statistical rigor of **PyDESeq2** (a Python re-implementation of the widely used R/Bioconductor **DESeq2** method) inside a clean, modern, dark/light themed graphical interface — so you can go from raw counts to a finished **Volcano Plot**, **MA Plot**, **Summary Bar Chart**, or **Expression Heatmap** in minutes.
 
-<br/>
+### How it works — Data → Analysis → Visualization
 
-## ✨ Features
+```mermaid
+flowchart LR
+    A["📂 Raw RNA-seq Counts\n(GDC / TCGA STAR-Counts)"] --> B["🧹 Preprocessing & QC\nSample sheet mapping · group normalization"]
+    B --> C["🧬 Differential Expression Analysis\nPyDESeq2 statistical engine"]
+    C --> D["📊 Statistical Filtering\nlog2FoldChange & adjusted p-value thresholds"]
+    D --> E["🎨 Visualization Engine"]
+    E --> F1["🌋 Volcano Plot"]
+    E --> F2["📈 MA Plot"]
+    E --> F3["📊 Summary Bar Chart"]
+    E --> F4["🔥 Expression Heatmap"]
+    F1 --> G["💾 Export\nPNG · PDF · TIFF · SVG @ custom DPI"]
+    F2 --> G
+    F3 --> G
+    F4 --> G
+```
 
-<table>
-<tr>
-<td width="50%" valign="top">
+In short: the pipeline **ingests raw counts → runs statistical differential expression analysis → applies significance filtering → feeds the results into the visualization engine → generates and exports publication-ready charts.**
 
-### 🔬 Analysis
-- **Automated DEG Engine** built on PyDESeq2, with robust filtering, dispersion estimation, and Wald testing
-- **Full statistical output saved for reuse** — complete results, significant DEGs, and up-/down-regulated gene lists
-- **Multiprocessing-safe architecture** — custom isolation prevents recursive worker deadlocks when freezing PyDESeq2 with PyInstaller
-- **Clean data management** — automatic GDC sample sheet parsing, duplicate removal, structured CSV/TXT caching
+---
 
-</td>
-<td width="50%" valign="top">
+## ✨ Key Features
 
-### 🎨 Visualization
-- **Publication-ready plots** — Volcano, MA, expression heatmaps (Z-score or rank-based), summary bar charts
-- **Intelligent gene labelling** — supply a target gene list; labels are placed automatically with collision-free connectors
-- **Zero-coding standalone binary** — compiled Windows `.exe`, ready for shared lab environments
-- **Multi-format export** — PNG, PDF, TIFF, SVG at custom resolutions and dimensions
+- 🧬 **Automated DEG Pipeline** — Full PyDESeq2-based differential expression analysis directly from GDC/TCGA Gene Expression Quantification (STAR-Counts) folders and sample sheets.
+- 🖥️ **Modern Cross-Platform GUI** — Clean, responsive interface built with CustomTkinter, featuring both **Dark** and **Light** themes.
+- 🌋 **Multiple Publication-Ready Plot Types** — Volcano Plot, MA Plot, Summary Bar Chart, and Expression Heatmap, all styled for scientific publication.
+- 🏷️ **Smart Gene Labeling** — Automatically label genes of interest on plots, with intelligent overlap-avoidance powered by `adjustText`.
+- 🎚️ **Configurable Statistical Thresholds** — Fine-tune `|log2FoldChange|` and adjusted p-value (`padj`) cutoffs to match your study design.
+- 🖼️ **Live Multi-Plot Preview** — Generate and flip through all plots before exporting, with instant thumbnails.
+- 📤 **Flexible Batch Export** — Export figures as **PNG, PDF, TIFF, or SVG** at custom DPI, individually or as a combined side-by-side composite figure.
+- ⚡ **Multi-Threaded Processing** — Long-running analyses run in background threads with a live progress log, keeping the UI responsive.
+- 🩺 **Multi-Cancer Ready** — Not limited to a single cancer type; works with any GDC/TCGA project (TCGA-COAD, TCGA-BRCA, TCGA-LUAD, etc.).
+- 📚 **Built-In Tutorial & Citation Tools** — A guided in-app walkthrough and a one-click citation generator for your publications.
+- 🌐 **Fully Cross-Platform** — Native support for **Windows**, **macOS**, and **Linux**.
 
-</td>
-</tr>
-</table>
+---
 
-<br/>
-
-## 🖼️ Screenshots — Example Output Figures
+## 🖼️ Screenshots
 
 <div align="center">
 
-| Volcano Plot (with gene labels) | MA Plot (with gene labels) |
-|:---:|:---:|
-| ![Volcano Plot](picures/Results/TCGA-Project_volcano_plot_labeled.png) | ![MA Plot](picures/Results/TCGA-Project_ma_plot_labeled.png) |
+### Light Theme
+<img src="docs/light.png" alt="DEG Pipeline & Visualizer - Light Theme Screenshot" width="850"/>
 
-| Combined Standard Figures | Summary Bar Chart |
-|:---:|:---:|
-| ![Combined Figures](picures/Results/TCGA-Project_combined_standard_labeled.png) | ![Bar Chart](picures/Results/TCGA-Project_summary_bar_chart.png) |
+### Dark Theme
+<img src="docs/dark.png" alt="DEG Pipeline & Visualizer - Dark Theme Screenshot" width="850"/>
 
 </div>
 
-> 💡 **Tip:** Click any image to view it in full resolution. All figures shown here were exported directly from the application, using public TCGA data (Tumor vs. Normal).
+> 💡 *Screenshot files live in the [`docs/`](./docs) folder as `light.png` and `dark.png`. Rename or replace them there if your exported filenames differ.*
 
-<br/>
+---
 
-<details>
-<summary><b>🖥️ Click to expand — Full UI Walkthrough (step-by-step)</b></summary>
+## 📊 Sample Output Gallery
 
-<br/>
+<div align="center">
 
-| Step 1: Launching the Application | Step 2: Main Tab |
+| Volcano Plot | MA Plot |
 |:---:|:---:|
-| ![Launch](picures/1.png) | ![Step 1 Tab](picures/2.png) |
+| <img src="docs/sample_volcano.png" alt="Sample Volcano Plot" width="400"/> | <img src="docs/sample_ma_plot.png" alt="Sample MA Plot" width="400"/> |
 
-| Step 3: Second Tab | Step 4: Loading Data into Step 1 |
+| Summary Bar Chart | combined standard |
 |:---:|:---:|
-| ![Loading Data](picures/3.png) | ![Running Analysis](picures/4.png) |
+| <img src="docs/sample_bar_chart.png" alt="Sample Summary Bar Chart" width="400"/> | <img src="docs/sample_heatmap.png" alt="Sample Expression Heatmap" width="400"/> |
 
-| Step 5: Running Analysis (In Progress) | Step 6: Step 1 Complete — Data Saved |
-|:---:|:---:|
-| ![Step 1 Complete](picures/5.png) | ![Step 2 Auto-loaded](picures/6.png) |
+| ombined standard labeled |
+|:---:|
+| <img src="docs/sample_bar_chart.png" alt="Sample Summary Bar Chart" width="400"/> |
 
-| Step 7: Auto-loaded Paths | Step 8: Gene Input & Export Settings |
-|:---:|:---:|
-| ![Gene Input & Settings](picures/7.png) | ![Step 2 Complete](picures/8.png) |
+</div>
 
-| Step 9: Step 2 Complete — Results Saved | Viewing Generated Plots |
-|:---:|:---:|
-| ![Viewing Plots](picures/9.png) | ![Final Results](picures/result.png) |
+---
 
-</details>
+## 💻 Installation
 
-<br/>
+**DEG Pipeline & Visualizer** runs natively on **Windows**, **macOS**, and **Linux**. Choose the guide for your operating system below.
 
-## 🔄 Workflow
+### ✅ Prerequisites (all platforms)
 
-The pipeline is split into two clear, modular steps: **statistical analysis first, visualization second.**
+- **Python 3.10 or newer** — [Download Python](https://www.python.org/downloads/)
+- **pip** (bundled with Python)
+- **Git** (optional, for cloning the repository)
 
-```mermaid
-flowchart TD
+### 🪟 Windows
 
-    A[Raw RNA-seq Count Files]
-    B[GDC Sample Sheet]
-
-    A --> C
-    B --> C
-
-    C["STEP 1<br/>Differential Expression Analysis"]
-
-    C --> D1[Count Matrix]
-    C --> D2[Normalized Counts]
-    C --> D3[Differential Expression Results]
-    C --> D4[Analysis Cache]
-
-    D1 --> E
-    D2 --> E
-    D3 --> E
-    D4 --> E
-
-    E["STEP 2<br/>Visualization"]
-
-    E --> F[Volcano Plot]
-    E --> G[MA Plot]
-    E --> H[Heatmap]
-    E --> I[Summary Bar Chart]
-
-    F --> J["Export<br/>PNG • PDF • TIFF • SVG"]
-    G --> J
-    H --> J
-    I --> J
-```
-
-<br/>
-
-## 📊 Step 1 — Differential Expression Analysis
-
-The first stage performs a complete RNA-seq differential expression workflow starting from raw GDC/TCGA count files — this is where the actual statistics happen. Everything after this step is visualization of these results.
-
-**Main tasks**
-- Reads and validates the GDC Sample Sheet
-- Automatically synchronizes metadata with expression files
-- Detects and removes duplicated samples
-- Builds a unified gene count matrix
-- Filters genes with extremely low expression
-- Estimates size factors and normalizes read counts
-- Estimates gene-wise and fitted dispersions using **PyDESeq2**
-- Performs Wald statistical testing
-- Adjusts p-values using the Benjamini–Hochberg FDR procedure
-- Classifies every tested gene as upregulated, downregulated, or not significant
-- Generates reusable cache files for downstream visualization
-
-**Generated files**
-
-| File | Description |
-|:--|:--|
-| `All_DEGs_results.csv` | Complete statistical results for every detected gene |
-| `Significant_DEGs.csv` | Genes passing user-defined significance thresholds |
-| `Upregulated_in_Tumor.csv` | Upregulated genes |
-| `Downregulated_in_Tumor.csv` | Downregulated genes |
-| `all_genes_complete_list.csv` | Every tested gene with fold-change, p-values, and regulation status (Up/Down/NS) |
-| `normalized_counts.csv` | Normalized expression matrix |
-| `sample_grouping.csv` | Parsed sample metadata |
-| `analysis_cache.csv` | Optimized cache used by the visualization module |
-
-<br/>
-
-## 📈 Step 2 — Visualization Engine
-
-The second stage transforms the statistical outputs generated in Step 1 into high-quality, publication-ready figures.
-
-Unlike conventional workflows, **statistical analysis is executed only once**. Subsequent visualizations can be regenerated instantly by loading the cached analysis results — no need to rerun the DEG analysis just to change a plot's style or labels.
-
-<table>
-<tr>
-<td valign="top">
-
-**Available visualizations**
-- Volcano Plot
-- MA Plot
-- Expression Heatmap
-- Summary Bar Chart
-- Combined multi-panel figure
-
-</td>
-<td valign="top">
-
-**Interactive features**
-- Custom log₂ Fold Change threshold
-- Adjustable FDR threshold
-- Dynamic DPI selection
-- Flexible figure dimensions
-- Automatic gene highlighting
-- Collision-free label placement
-
-</td>
-<td valign="top">
-
-**Export formats**
-- 🖼️ PNG
-- 📄 PDF
-- 🎯 SVG (vector)
-- 🎞️ TIFF
-
-</td>
-</tr>
-</table>
-
-<br/>
-
-## 🚀 Installation
-
-<table>
-<tr>
-<td width="50%" valign="top">
-
-### Option 1 — Standalone Windows App ⭐ *Recommended*
-
-For users who simply want to analyse RNA-seq datasets without installing Python.
-
-1. Download the latest executable from the **[Releases](../../releases)** page
-2. Extract the downloaded archive
-3. Launch `DEG_Pipeline.exe`
-4. Load your data and begin analysis immediately
-
-No Python installation or command-line usage required. ✅
-
-</td>
-<td width="50%" valign="top">
-
-### Option 2 — Run from Source
-
-**Requirements:** Python ≥ 3.9, pip · Windows / Linux / macOS
-
-```bash
-# Clone the repository
+```powershell
+# 1. Clone the repository (or download the ZIP from GitHub)
 git clone https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer.git
 cd DEG-Pipeline-Visualizer
 
-# Create a virtual environment
+# 2. (Recommended) Create a virtual environment
 python -m venv venv
-
-# Activate it
-# Windows:
 venv\Scripts\activate
-# Linux / macOS:
-source venv/bin/activate
 
-# Install dependencies
+# 3. Install dependencies
 pip install -r requirements.txt
 
-# Launch the app
+# 4. Run the application
 python deg_pipeline.py
 ```
 
-</td>
-</tr>
-</table>
+### 🍎 macOS
 
-<br/>
+```bash
+# 1. Clone the repository
+git clone https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer.git
+cd DEG-Pipeline-Visualizer
 
-## 📦 Core Dependencies
+# 2. (Recommended) Create a virtual environment
+python3 -m venv venv
+source venv/bin/activate
 
-| Library | Purpose |
-|:--|:--|
-| `PyDESeq2` | Differential expression analysis |
-| `pandas` | Data processing |
-| `NumPy` | Numerical computation |
-| `Matplotlib` | Scientific plotting |
-| `Seaborn` | Statistical visualization |
-| `adjustText` | Automatic gene-label optimization |
-| `Tkinter` | Desktop graphical interface |
+# 3. Install dependencies
+pip3 install -r requirements.txt
 
-<br/>
-
-## 📂 Input Data Structure
-
-```text
-Project_Directory/
-│
-├── Gene_Expression_Quantification/
-│   ├── Sample_001/
-│   ├── Sample_002/
-│   └── ...
-│
-└── gdc_sample_sheet.tsv
+# 4. Run the application
+python3 deg_pipeline.py
 ```
 
-<br/>
+> On macOS, if `tkinter` is missing, install it via Homebrew: `brew install python-tk`
 
-## 📁 Output Directory
+### 🐧 Linux
 
-```text
-Output/
-├── Data/
-│   ├── All_DEGs_results.csv
-│   ├── Significant_DEGs.csv
-│   ├── Upregulated_in_Tumor.csv
-│   ├── Downregulated_in_Tumor.csv
-│   ├── all_genes_complete_list.csv
-│   ├── normalized_counts.csv
-│   ├── sample_grouping.csv
-│   └── analysis_cache.csv
-│
-├── Pictures/
-│   ├── Volcano Plot
-│   ├── MA Plot
-│   ├── Heatmap
-│   ├── Summary Bar Chart
-│   └── Combined Figure
-│
-└── Logs/
-    └── analysis_log.txt
+```bash
+# 1. Install system-level Tkinter support (Debian/Ubuntu example)
+sudo apt-get update && sudo apt-get install -y python3-tk
+
+# 2. Clone the repository
+git clone https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer.git
+cd DEG-Pipeline-Visualizer
+
+# 3. (Recommended) Create a virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# 4. Install dependencies
+pip3 install -r requirements.txt
+
+# 5. Run the application
+python3 deg_pipeline.py
 ```
 
-Each generated file is automatically organized into dedicated folders, making downstream analyses reproducible and easy to manage. ✅
+---
 
-<br/>
+## 🚀 Usage Guide
 
-## 📚 Citation
+1. **Prepare your data** — Download RNA-seq data from the **GDC Data Portal (TCGA)** as *Gene Expression Quantification — STAR-Counts*, along with the accompanying **GDC Sample Sheet (.tsv)**. Keep the original folder structure (one subfolder per sample).
+2. **Run DEG Analysis** — Open the **Step 1 — DEG Analysis** tab, select the counts folder, the sample sheet, and an output folder. Set your project label and thresholds (`|log2FC| ≥ 1`, `padj < 0.05` are typical starting points), then click **Run DEG Analysis**.
+3. **Load results into Visualization** — Results auto-load into **Step 2**, or load manually from the generated `Data/` folder.
+4. **Choose a plot type** — Pick **All Plots** (Volcano + MA + Bar + Heatmap) or a single plot type.
+5. **Label genes (optional)** — Paste gene symbols to highlight specific genes of interest on your plots.
+6. **Preview & Export** — Generate live previews, then export all figures as PNG / PDF / TIFF / SVG at your chosen DPI.
+7. **Cite the tool** — If this software supports your research, please cite it (see below) and ⭐ star the repository.
 
-If this software contributes to your published research, please cite the repository:
+---
 
-```bibtex
-@software{Balaei2026,
-  author  = {Alireza Balaei Kahnamoei},
-  title   = {DEG Pipeline \& Visualizer},
-  year    = {2026},
-  url     = {https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer}
-}
+## 📦 Requirements
+
+All Python dependencies are listed in [`requirements.txt`](./requirements.txt) and installed automatically via `pip install -r requirements.txt`. See that file for the exact, verified list of packages this application depends on.
+
+---
+
+## 📑 Citation
+
+If **DEG Pipeline & Visualizer** contributed to your research, please cite it:
+
+```
+Balaei A. (2026). DEG Pipeline & Visualizer (v3.4.0) [Computer software].
+https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer
 ```
 
-<br/>
+Please also consider ⭐ **starring the repository** — it genuinely helps the project grow and supports continued development of free scientific software.
+
+---
 
 ## 📜 License
 
-Released under the **[MIT License](LICENSE)**. You are free to use, modify, distribute, and incorporate this software into academic or commercial projects, provided that the original copyright notice and license are retained.
+This project is distributed under a **custom, restrictive, source-available proprietary license** — **NOT** MIT, Apache, GPL, or any other open-source license.
 
-<br/>
+**The source code is visible for transparency and academic review only.** Copying, redistributing, modifying for redistribution, or commercially exploiting this software — in whole or in part — **without the Author's explicit written permission is strictly prohibited.**
 
-## 👨‍💻 Author
+See the full [`LICENSE`](./LICENSE) file for the complete terms.
+
+---
+
+## 👤 Author & Contact
+
+**Developed and maintained by Alireza Balaei**
 
 <div align="center">
 
-**Alireza Balaei Kahnamoei**
-
-B.Sc. Biotechnology Student · Bioinformatics Researcher · Computational Biology Enthusiast · Python Developer
-
-[![GitHub](https://img.shields.io/badge/GitHub-alirezabk1382927--sys-181717?style=flat-square&logo=github)](https://github.com/alirezabk1382927-sys)
+| Platform | Link |
+|:---|:---|
+| 🐙 **GitHub** | [github.com/alirezabk1382927-sys](https://github.com/alirezabk1382927-sys) |
+| 💼 **LinkedIn** | [linkedin.com/in/alireza-balaei-kahnamoei-aa8216344](https://www.linkedin.com/in/alireza-balaei-kahnamoei-aa8216344/) |
+| 🔬 **ORCID** | [orcid.org/0009-0009-9746-6571](https://orcid.org/0009-0009-9746-6571) |
+| 📦 **Repository** | [DEG-Pipeline-Visualizer](https://github.com/alirezabk1382927-sys/DEG-Pipeline-Visualizer) |
 
 </div>
-
-<br/>
-
-## 💬 Support
-
-Questions, bug reports, feature requests, and scientific discussions are welcome.
-
-- 🐛 Found a bug or have a feature request? [Open an issue](../../issues)
-- 🤝 Interested in research collaboration? Reach out via GitHub or LinkedIn
-
-<br/>
 
 ---
 
 <div align="center">
 
-### ⭐ If this project helps your research, consider giving it a star!
+*Built for the bioinformatics and cancer genomics community — RNA-seq analysis · TCGA · DESeq2 · differential gene expression · volcano plots · scientific visualization.*
 
-<em>Made with ❤️ for the bioinformatics research community.</em>
-
-**Alireza Balaei Kahnamoei**
+**If this tool helped your research, please ⭐ star the repo and share it.**
 
 </div>
