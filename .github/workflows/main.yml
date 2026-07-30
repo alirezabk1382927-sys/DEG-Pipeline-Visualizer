@@ -53,7 +53,7 @@ jobs:
 
       - name: Build Executable with PyInstaller
         run: |
-          pyinstaller --noconfirm --onefile --windowed ${{ matrix.icon_arg }} --add-data "icon.png${{ matrix.sep }}." --name "${{ matrix.artifact_name }}" main.py
+          pyinstaller --noconfirm --onefile --windowed ${{ matrix.icon_arg }} --add-data "icon.png${{ matrix.sep }}." --name "${{ matrix.artifact_name }}" deg_pipeline.py
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
